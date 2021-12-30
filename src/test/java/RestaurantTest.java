@@ -65,5 +65,27 @@ class RestaurantTest {
         assertThrows(itemNotFoundException.class,
                 ()->restaurant.removeFromMenu("French fries"));
     }
+
+    @Test
+    public void get_order_cost_greater_than_zero_for_selected_items(){
+        ArrayList<String> itemsSelected = new ArrayList<>();
+        itemsSelected.add("Chocolate Ice-Cream");
+        itemsSelected.add("Vegetable Cheese Sandwich");
+        int expectedOrderCost = 0;
+        List<Item> menuItems = restaurant.getMenu();
+        for(String selectedItemName:itemsSelected){
+            Item item = menuItems.stream().filter(x -> x.getName().equals(selectedItemName)).findFirst().orElse(null);
+            expectedOrderCost += item.getPrice();
+        }
+        int totalOrderCost = restaurant.getOrderValue(itemsSelected);
+        assertEquals(expectedOrderCost,totalOrderCost);
+    }
+
+    @Test
+    public void get_order_cost_should_display_zero_when_no_items_selected(){
+        ArrayList<String> itemsSelected = new ArrayList<>();
+        int totalOrderCost = restaurant.getOrderValue(itemsSelected);
+        assertEquals(0,totalOrderCost);
+    }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
